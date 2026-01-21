@@ -1,0 +1,1727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Montas Lab - Modern Networking Technologies & Digital Solutions</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0F172A;
+            --secondary: #3B82F6;
+            --accent: #8B5CF6;
+            --accent-light: #A78BFA;
+            --light: #F8FAFC;
+            --dark: #0F172A;
+            --gray: #64748B;
+            --gray-light: #E2E8F0;
+            --success: #10B981;
+            --whatsapp: #25D366;
+            --call: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --gradient: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+            --gradient-dark: linear-gradient(135deg, #1E40AF 0%, #7C3AED 100%);
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.15);
+            --border-radius: 16px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            color: var(--dark);
+            background-color: var(--light);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Floating Action Buttons */
+        .floating-buttons {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 999;
+        }
+
+        .floating-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            text-decoration: none;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .floating-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .floating-btn:hover::before {
+            transform: translateY(0);
+        }
+
+        .floating-btn:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+        }
+
+        .floating-btn.whatsapp {
+            background: var(--whatsapp);
+            background: linear-gradient(135deg, #25D366 0%, #1DA851 100%);
+        }
+
+        .floating-btn.call {
+            background: var(--call);
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+        }
+
+        .floating-tooltip {
+            position: absolute;
+            right: 70px;
+            background: var(--primary);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(10px);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .floating-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -6px;
+            transform: translateY(-50%);
+            border-left: 6px solid var(--primary);
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+        }
+
+        .floating-btn:hover .floating-tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+
+        /* Header & Navigation */
+        header {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.2rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+        }
+
+        .logo-text span {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Desktop Navigation */
+        .desktop-nav {
+            display: flex;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-menu li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.05rem;
+            padding: 8px 0;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .nav-menu li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px;
+            background: var(--accent-light);
+            bottom: -5px;
+            left: 0;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu li a:hover::after,
+        .nav-menu li a.active::after {
+            width: 100%;
+        }
+
+        .nav-menu li a:hover {
+            color: var(--accent-light);
+        }
+
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mobile-menu-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Mobile Navigation */
+        .mobile-nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .mobile-nav-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 320px;
+            height: 100%;
+            background: var(--primary);
+            z-index: 1000;
+            overflow-y: auto;
+            transition: right 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.3);
+            border-left: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .mobile-nav.active {
+            right: 0;
+        }
+
+        .mobile-nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .mobile-nav-close {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            font-size: 1.4rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .mobile-nav-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+
+        .mobile-nav ul {
+            list-style: none;
+            padding: 20px 0;
+        }
+
+        .mobile-nav ul li {
+            margin-bottom: 5px;
+        }
+
+        .mobile-nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 18px 30px;
+            transition: var(--transition);
+            border-left: 4px solid transparent;
+        }
+
+        .mobile-nav ul li a:hover,
+        .mobile-nav ul li a.active {
+            background: rgba(255, 255, 255, 0.05);
+            border-left-color: var(--accent);
+            padding-left: 35px;
+        }
+
+        /* Action Button */
+        .action-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--gradient);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+            border: none;
+            cursor: pointer;
+        }
+
+        .action-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, #1E293B 100%);
+            color: white;
+            padding: 180px 0 120px;
+            margin-top: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 850px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.8rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        .hero-highlight {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+            opacity: 0.9;
+            color: var(--gray-light);
+        }
+
+        /* Sections */
+        section {
+            padding: 100px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-size: 2.8rem;
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+            padding-bottom: 15px;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 5px;
+            background: var(--gradient);
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 3px;
+        }
+
+        .section-title p {
+            color: var(--gray);
+            max-width: 700px;
+            margin: 25px auto 0;
+            font-size: 1.15rem;
+        }
+
+        /* Services Section */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid var(--gray-light);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--accent-light);
+        }
+
+        .service-image {
+            height: 220px;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .service-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .service-card:hover .service-image img {
+            transform: scale(1.05);
+        }
+
+        .service-content {
+            padding: 30px;
+        }
+
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .service-content h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .service-description {
+            color: var(--gray);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .service-features {
+            list-style: none;
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+
+        .service-features li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .service-features li:before {
+            content: '✓';
+            color: var(--success);
+            font-weight: bold;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+
+        /* Pricing Section - Card Layout */
+        .pricing-section {
+            background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 35px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--accent-light);
+        }
+
+        .pricing-card.popular {
+            border-color: var(--accent);
+            transform: scale(1.02);
+        }
+
+        .pricing-card.popular:hover {
+            transform: scale(1.02) translateY(-10px);
+        }
+
+        .pricing-badge {
+            position: absolute;
+            top: 20px;
+            right: -30px;
+            background: var(--accent);
+            color: white;
+            padding: 6px 35px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transform: rotate(45deg);
+        }
+
+        .pricing-type {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .pricing-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .pricing-type h3 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            flex: 1;
+        }
+
+        .pricing-number {
+            display: inline-block;
+            background: rgba(139, 92, 246, 0.1);
+            color: var(--accent);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .pricing-pages {
+            color: var(--gray);
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        .pricing-pages i {
+            margin-right: 8px;
+            color: var(--secondary);
+        }
+
+        .price-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .price-option {
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(248, 250, 252, 0.5);
+            border: 1px solid var(--gray-light);
+            transition: var(--transition);
+        }
+
+        .price-option:hover {
+            border-color: var(--accent-light);
+            background: rgba(139, 92, 246, 0.05);
+        }
+
+        .option-type {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .price-amount {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--success);
+            margin-bottom: 5px;
+        }
+
+        .price-amount.dynamic {
+            color: var(--accent);
+        }
+
+        .price-conversion {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .price-features {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .price-features li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            color: var(--gray);
+        }
+
+        .price-features li i {
+            color: var(--success);
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+
+        .pricing-card .action-button {
+            width: 100%;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        /* Leadership Section */
+        .leadership-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .leader-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .leader-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--accent-light);
+        }
+
+        .leader-emoji {
+            font-size: 4rem;
+            margin-bottom: 25px;
+            display: block;
+        }
+
+        .leader-card h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.6rem;
+        }
+
+        .leader-title {
+            color: var(--secondary);
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .leader-bio {
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+
+        .leader-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .skill-tag {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--secondary);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: linear-gradient(135deg, var(--primary) 0%, #1E293B 100%);
+            color: white;
+        }
+
+        .contact-section .section-title h2 {
+            color: white;
+        }
+
+        .contact-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 60px;
+        }
+
+        .contact-details {
+            margin-top: 30px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            transition: transform 0.3s ease;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .contact-item:hover {
+            transform: translateX(10px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .contact-icon {
+            background: var(--gradient);
+            width: 55px;
+            height: 55px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            color: white;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .contact-text a {
+            color: var(--accent-light);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .contact-text a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary);
+            color: white;
+            padding: 80px 0 30px;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0.7;
+            font-size: 0.95rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1100px) {
+            .desktop-nav {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: flex;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2.2rem;
+            }
+            
+            .services-grid,
+            .pricing-grid,
+            .leadership-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .pricing-card.popular {
+                transform: none;
+            }
+            
+            .pricing-card.popular:hover {
+                transform: translateY(-10px);
+            }
+            
+            .floating-buttons {
+                bottom: 20px;
+                right: 20px;
+            }
+            
+            .floating-btn {
+                width: 55px;
+                height: 55px;
+                font-size: 1.3rem;
+            }
+            
+            .floating-tooltip {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .mobile-nav {
+                width: 85%;
+            }
+            
+            .pricing-card {
+                padding: 25px;
+            }
+            
+            .floating-buttons {
+                bottom: 15px;
+                right: 15px;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Action Buttons -->
+    <div class="floating-buttons">
+        <a href="https://wa.me/260776674744?text=Hello%20Montas%20Lab!%20I%20would%20like%20to%20inquire%20about%20your%20services" 
+           target="_blank" 
+           class="floating-btn whatsapp">
+            <i class="fab fa-whatsapp"></i>
+            <span class="floating-tooltip">Chat on WhatsApp</span>
+        </a>
+        
+        <a href="tel:+265884560048" class="floating-btn call">
+            <i class="fas fa-phone"></i>
+            <span class="floating-tooltip">Call Us Now</span>
+        </a>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <div class="logo-icon">M</div>
+                <div class="logo-text">THE <span>MONTAS</span> LAB</div>
+            </div>
+            
+            <!-- Desktop Navigation -->
+            <nav class="desktop-nav">
+                <ul class="nav-menu">
+                    <li><a href="#home" class="active">Home</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#leadership">Leadership</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+            
+            <!-- Mobile Menu Button -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+    
+    <!-- Mobile Navigation Overlay -->
+    <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
+    
+    <!-- Mobile Navigation Menu -->
+    <div class="mobile-nav" id="mobileNav">
+        <div class="mobile-nav-header">
+            <div class="logo-text">THE <span>MONTAS</span> LAB</div>
+            <button class="mobile-nav-close" id="mobileNavClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <ul>
+            <li><a href="#home" class="active"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="#services"><i class="fas fa-cogs"></i> Services</a></li>
+            <li><a href="#pricing"><i class="fas fa-tags"></i> Pricing</a></li>
+            <li><a href="#leadership"><i class="fas fa-users"></i> Leadership</a></li>
+            <li><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
+        </ul>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Modern Networking Technologies & <span class="hero-highlight">Digital Solutions</span></h1>
+                <p>Bridging complex digital infrastructure with user‑centric software to support a connected and digitally empowered Africa.</p>
+                <a href="#services" class="action-button">
+                    <i class="fas fa-rocket"></i> Explore Our Services
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Services</h2>
+                <p>Comprehensive technology solutions tailored for modern African businesses</p>
+            </div>
+            <div class="services-grid">
+                
+                <!-- Software Development -->
+                <div class="service-card">
+                    <div class="service-image">
+                        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Software Development">
+                    </div>
+                    <div class="service-content">
+                        <div class="service-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h3>Software Development</h3>
+                        <p class="service-description">Custom-built software solutions designed to automate operations, streamline workflows, and manage data efficiently. We create robust applications that grow with your business.</p>
+                        <ul class="service-features">
+                            <li>Enterprise Automation Systems</li>
+                            <li>Business Management Software</li>
+                            <li>School & Institutional Databases</li>
+                            <li>Custom CRM & ERP Solutions</li>
+                            <li>Mobile Application Development</li>
+                        </ul>
+                        <a href="#contact" class="action-button" style="padding: 10px 20px; font-size: 0.9rem;">
+                            <i class="fas fa-comment-dots"></i> Get Quote
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Website Development -->
+                <div class="service-card">
+                    <div class="service-image">
+                        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Website Development">
+                    </div>
+                    <div class="service-content">
+                        <div class="service-icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <h3>Website Development</h3>
+                        <p class="service-description">Modern, responsive websites designed for optimal performance and user experience. From simple portfolios to complex e-commerce platforms, we build digital presence that converts.</p>
+                        <ul class="service-features">
+                            <li>Responsive Web Design</li>
+                            <li>E-commerce Platforms</li>
+                            <li>Corporate Websites & Portals</li>
+                            <li>CMS Integration (WordPress, etc.)</li>
+                            <li>Progressive Web Apps</li>
+                        </ul>
+                        <a href="#pricing" class="action-button" style="padding: 10px 20px; font-size: 0.9rem;">
+                            <i class="fas fa-tags"></i> View Pricing
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- SEO & Digital Marketing -->
+                <div class="service-card">
+                    <div class="service-image">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="SEO & Digital Marketing">
+                    </div>
+                    <div class="service-content">
+                        <div class="service-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>SEO & Digital Marketing</h3>
+                        <p class="service-description">Boost your online visibility and reach your target audience with strategic digital marketing. We optimize your digital presence for maximum engagement and conversions.</p>
+                        <ul class="service-features">
+                            <li>Search Engine Optimization (SEO)</li>
+                            <li>Google Analytics & Search Console</li>
+                            <li>Social Media Marketing</li>
+                            <li>Content Strategy & Creation</li>
+                            <li>PPC Campaign Management</li>
+                        </ul>
+                        <a href="#contact" class="action-button" style="padding: 10px 20px; font-size: 0.9rem;">
+                            <i class="fas fa-bullhorn"></i> Boost Visibility
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Computer Networking -->
+                <div class="service-card">
+                    <div class="service-image">
+                        <img src="https://images.unsplash.com/photo-1533750349088-cd871a92f312?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Computer Networking">
+                    </div>
+                    <div class="service-content">
+                        <div class="service-icon">
+                            <i class="fas fa-network-wired"></i>
+                        </div>
+                        <h3>Computer Networking</h3>
+                        <p class="service-description">Design, implementation, and management of secure, high-performance network infrastructure for businesses of all sizes. Ensure reliable connectivity and optimal performance.</p>
+                        <ul class="service-features">
+                            <li>Wired & Wireless Enterprise Networks</li>
+                            <li>LAN/WAN Setup & Configuration</li>
+                            <li>Network Security & Firewalls</li>
+                            <li>Bandwidth Optimization</li>
+                            <li>Network Monitoring & Maintenance</li>
+                        </ul>
+                        <a href="#contact" class="action-button" style="padding: 10px 20px; font-size: 0.9rem;">
+                            <i class="fas fa-wifi"></i> Connect Now
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- CCTV & Surveillance -->
+                <div class="service-card">
+                    <div class="service-image">
+                        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="CCTV & Surveillance">
+                    </div>
+                    <div class="service-content">
+                        <div class="service-icon">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <h3>CCTV & Surveillance</h3>
+                        <p class="service-description">Advanced security systems for properties and organizations. From installation to remote monitoring, we provide comprehensive security solutions that protect what matters most.</p>
+                        <ul class="service-features">
+                            <li>IP & Analog CCTV Camera Systems</li>
+                            <li>Remote Monitoring Solutions</li>
+                            <li>Mobile & Desktop Applications</li>
+                            <li>Security Analytics & AI Features</li>
+                            <li>24/7 Technical Support</li>
+                        </ul>
+                        <a href="#contact" class="action-button" style="padding: 10px 20px; font-size: 0.9rem;">
+                            <i class="fas fa-shield-alt"></i> Secure Premises
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- ICT Support Services -->
+                <div class="service-card">
+                    <div class="service-image">
+                        <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="ICT Support Services">
+                    </div>
+                    <div class="service-content">
+                        <div class="service-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <h3>ICT Support Services</h3>
+                        <p class="service-description">Comprehensive technical support to maintain and optimize your digital infrastructure. We ensure your systems run smoothly so you can focus on your core business.</p>
+                        <ul class="service-features">
+                            <li>Hardware Repairs & Maintenance</li>
+                            <li>System Security & Virus Removal</li>
+                            <li>Data Backup & Recovery</li>
+                            <li>Software Installation & Updates</li>
+                            <li>On-site & Remote Support</li>
+                        </ul>
+                        <a href="#contact" class="action-button" style="padding: 10px 20px; font-size: 0.9rem;">
+                            <i class="fas fa-tools"></i> Get Support
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Network Security -->
+                <div class="service-card">
+                    <div class="service-image">
+                        <img src="https://images.unsplash.com/photo-1614064641938-3bbee52942c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Network Security">
+                    </div>
+                    <div class="service-content">
+                        <div class="service-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>Network Security</h3>
+                        <p class="service-description">Protect your digital assets with comprehensive security solutions. We implement multi-layered security strategies to safeguard against evolving cyber threats.</p>
+                        <ul class="service-features">
+                            <li>Firewall Configuration & Management</li>
+                            <li>Data Encryption Strategies</li>
+                            <li>Security Audits & Vulnerability Assessment</li>
+                            <li>Intrusion Detection Systems</li>
+                            <li>Security Awareness Training</li>
+                        </ul>
+                        <a href="#contact" class="action-button" style="padding: 10px 20px; font-size: 0.9rem;">
+                            <i class="fas fa-lock"></i> Secure Network
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Cloud & Data Solutions -->
+                <div class="service-card">
+                    <div class="service-image">
+                        <img src="https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Cloud & Data Solutions">
+                    </div>
+                    <div class="service-content">
+                        <div class="service-icon">
+                            <i class="fas fa-cloud"></i>
+                        </div>
+                        <h3>Cloud & Data Solutions</h3>
+                        <p class="service-description">Reliable cloud-based systems for secure data storage, backup, and access. Modernize your infrastructure with scalable cloud solutions tailored to your needs.</p>
+                        <ul class="service-features">
+                            <li>Data Backup & Disaster Recovery</li>
+                            <li>Cloud Migration Services</li>
+                            <li>Remote Team Access Systems</li>
+                            <li>Cloud Infrastructure Setup</li>
+                            <li>Database Design & Management</li>
+                        </ul>
+                        <a href="#contact" class="action-button" style="padding: 10px 20px; font-size: 0.9rem;">
+                            <i class="fas fa-database"></i> Cloud Solutions
+                        </a>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Website Development Pricing</h2>
+                <p>Transparent pricing for professional website development services</p>
+            </div>
+            
+            <div class="pricing-grid">
+                <!-- Portfolio Website -->
+                <div class="pricing-card">
+                    <span class="pricing-number">01</span>
+                    <div class="pricing-type">
+                        <div class="pricing-icon">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <h3>Portfolio Website</h3>
+                    </div>
+                    <p class="pricing-pages"><i class="fas fa-file-alt"></i> Up to 6 pages</p>
+                    
+                    <div class="price-options">
+                        <div class="price-option">
+                            <div class="option-type">Static Website</div>
+                            <div class="price-amount">$97</div>
+                            <div class="price-conversion">≈ MWK 170,000</div>
+                        </div>
+                        <div class="price-option">
+                            <div class="option-type">Dynamic Website</div>
+                            <div class="price-amount dynamic">$171</div>
+                            <div class="price-conversion">≈ MWK 299,000</div>
+                        </div>
+                    </div>
+                    
+                    <ul class="price-features">
+                        <li><i class="fas fa-check"></i> Responsive Design</li>
+                        <li><i class="fas fa-check"></i> Basic SEO Setup</li>
+                        <li><i class="fas fa-check"></i> Contact Form</li>
+                        <li><i class="fas fa-check"></i> 1 Month Support</li>
+                    </ul>
+                    
+                    <a href="#contact" class="action-button">
+                        <i class="fas fa-shopping-cart"></i> Get This Package
+                    </a>
+                </div>
+                
+                <!-- Business Portfolio Website -->
+                <div class="pricing-card popular">
+                    <div class="pricing-badge">POPULAR</div>
+                    <span class="pricing-number">03</span>
+                    <div class="pricing-type">
+                        <div class="pricing-icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <h3>Business Portfolio</h3>
+                    </div>
+                    <p class="pricing-pages"><i class="fas fa-file-alt"></i> Up to 7 pages</p>
+                    
+                    <div class="price-options">
+                        <div class="price-option">
+                            <div class="option-type">Static Website</div>
+                            <div class="price-amount">$200</div>
+                            <div class="price-conversion">≈ MWK 350,000</div>
+                        </div>
+                        <div class="price-option">
+                            <div class="option-type">Dynamic Website</div>
+                            <div class="price-amount dynamic">$315 / $571 / $857</div>
+                            <div class="price-conversion">≈ MWK 550,000 / 999,000 / 1,499,000</div>
+                        </div>
+                    </div>
+                    
+                    <ul class="price-features">
+                        <li><i class="fas fa-check"></i> All Portfolio Features</li>
+                        <li><i class="fas fa-check"></i> Team/Staff Pages</li>
+                        <li><i class="fas fa-check"></i> Project Gallery</li>
+                        <li><i class="fas fa-check"></i> Client Testimonials</li>
+                        <li><i class="fas fa-check"></i> 3 Months Support</li>
+                    </ul>
+                    
+                    <a href="#contact" class="action-button">
+                        <i class="fas fa-crown"></i> Choose Popular Plan
+                    </a>
+                </div>
+                
+                <!-- E-commerce Website -->
+                <div class="pricing-card">
+                    <span class="pricing-number">08</span>
+                    <div class="pricing-type">
+                        <div class="pricing-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <h3>E-commerce Website</h3>
+                    </div>
+                    <p class="pricing-pages"><i class="fas fa-file-alt"></i> Up to 7 pages</p>
+                    
+                    <div class="price-options">
+                        <div class="price-option">
+                            <div class="option-type">Basic Store</div>
+                            <div class="price-amount dynamic">$429</div>
+                            <div class="price-conversion">≈ MWK 750,000</div>
+                        </div>
+                        <div class="price-option">
+                            <div class="option-type">Standard Store</div>
+                            <div class="price-amount dynamic">$571</div>
+                            <div class="price-conversion">≈ MWK 999,000</div>
+                        </div>
+                        <div class="price-option">
+                            <div class="option-type">Premium Store</div>
+                            <div class="price-amount dynamic">$1,424</div>
+                            <div class="price-conversion">≈ MWK 2,490,000</div>
+                        </div>
+                    </div>
+                    
+                    <ul class="price-features">
+                        <li><i class="fas fa-check"></i> Product Catalog</li>
+                        <li><i class="fas fa-check"></i> Shopping Cart</li>
+                        <li><i class="fas fa-check"></i> Payment Gateway</li>
+                        <li><i class="fas fa-check"></i> Order Management</li>
+                        <li><i class="fas fa-check"></i> 6 Months Support</li>
+                    </ul>
+                    
+                    <a href="#contact" class="action-button">
+                        <i class="fas fa-store"></i> Build Your Store
+                    </a>
+                </div>
+                
+                <!-- Education Website -->
+                <div class="pricing-card">
+                    <span class="pricing-number">05</span>
+                    <div class="pricing-type">
+                        <div class="pricing-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h3>Education Website</h3>
+                    </div>
+                    <p class="pricing-pages"><i class="fas fa-file-alt"></i> Up to 7 pages</p>
+                    
+                    <div class="price-options">
+                        <div class="price-option">
+                            <div class="option-type">Static Website</div>
+                            <div class="price-amount">$200</div>
+                            <div class="price-conversion">≈ MWK 350,000</div>
+                        </div>
+                        <div class="price-option">
+                            <div class="option-type">Dynamic Options</div>
+                            <div class="price-amount dynamic">$315 - $1,424</div>
+                            <div class="price-conversion">From MWK 550,000 to 2,490,000</div>
+                        </div>
+                    </div>
+                    
+                    <ul class="price-features">
+                        <li><i class="fas fa-check"></i> Course Listings</li>
+                        <li><i class="fas fa-check"></i> Student Portal</li>
+                        <li><i class="fas fa-check"></i> Event Calendar</li>
+                        <li><i class="fas fa-check"></i> Faculty Directory</li>
+                        <li><i class="fas fa-check"></i> 4 Months Support</li>
+                    </ul>
+                    
+                    <a href="#contact" class="action-button">
+                        <i class="fas fa-chalkboard-teacher"></i> Get Quote
+                    </a>
+                </div>
+                
+                <!-- Restaurant Website -->
+                <div class="pricing-card">
+                    <span class="pricing-number">12</span>
+                    <div class="pricing-type">
+                        <div class="pricing-icon">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                        <h3>Restaurant Website</h3>
+                    </div>
+                    <p class="pricing-pages"><i class="fas fa-file-alt"></i> Up to 7 pages</p>
+                    
+                    <div class="price-options">
+                        <div class="price-option">
+                            <div class="option-type">Static Website</div>
+                            <div class="price-amount">$171</div>
+                            <div class="price-conversion">≈ MWK 300,000</div>
+                        </div>
+                        <div class="price-option">
+                            <div class="option-type">Dynamic Options</div>
+                            <div class="price-amount dynamic">$257 / $571 / $857</div>
+                            <div class="price-conversion">≈ MWK 450,000 / 999,000 / 1,499,000</div>
+                        </div>
+                    </div>
+                    
+                    <ul class="price-features">
+                        <li><i class="fas fa-check"></i> Online Menu</li>
+                        <li><i class="fas fa-check"></i> Table Reservation</li>
+                        <li><i class="fas fa-check"></i> Food Gallery</li>
+                        <li><i class="fas fa-check"></i> Location Map</li>
+                        <li><i class="fas fa-check"></i> 3 Months Support</li>
+                    </ul>
+                    
+                    <a href="#contact" class="action-button">
+                        <i class="fas fa-concierge-bell"></i> Book Service
+                    </a>
+                </div>
+                
+                <!-- School Management System -->
+                <div class="pricing-card">
+                    <span class="pricing-number">09</span>
+                    <div class="pricing-type">
+                        <div class="pricing-icon">
+                            <i class="fas fa-school"></i>
+                        </div>
+                        <h3>School Management System</h3>
+                    </div>
+                    <p class="pricing-pages"><i class="fas fa-file-alt"></i> Custom Pages</p>
+                    
+                    <div class="price-options">
+                        <div class="price-option">
+                            <div class="option-type">Basic System</div>
+                            <div class="price-amount dynamic">$857</div>
+                            <div class="price-conversion">≈ MWK 1,499,000</div>
+                        </div>
+                        <div class="price-option">
+                            <div class="option-type">Advanced System</div>
+                            <div class="price-amount dynamic">$1,424</div>
+                            <div class="price-conversion">≈ MWK 2,490,000</div>
+                        </div>
+                    </div>
+                    
+                    <ul class="price-features">
+                        <li><i class="fas fa-check"></i> Student Database</li>
+                        <li><i class="fas fa-check"></i> Grade Management</li>
+                        <li><i class="fas fa-check"></i> Attendance Tracking</li>
+                        <li><i class="fas fa-check"></i> Fee Management</li>
+                        <li><i class="fas fa-check"></i> 12 Months Support</li>
+                    </ul>
+                    
+                    <a href="#contact" class="action-button">
+                        <i class="fas fa-laptop-code"></i> Custom Quote
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Additional Pricing Info -->
+            <div class="pricing-notes">
+                <h4>📌 Important Notes</h4>
+                <ul>
+                    <li>Prices are <strong>indicative</strong> and may vary based on design complexity, features, and custom requirements</li>
+                    <li>For personalized quotes, please contact Montas Lab directly</li>
+                    <li>Exchange rate used: <strong>1 MWK ≈ $0.0005722 USD</strong> (approximate rate as of mid-January 2026)</li>
+                    <li>All websites include responsive design, basic SEO setup, and technical support as indicated</li>
+                    <li>Additional website types available: Music, Nonprofit, Blogging, Real Estate, Health & Wellness, Event, Travel & Tourism, Fashion & Beauty, Freelancer/Consultant, and Custom Websites</li>
+                </ul>
+                
+                <div style="text-align: center; margin-top: 30px;">
+                    <a href="#contact" class="action-button">
+                        <i class="fas fa-calendar-check"></i> Request Custom Quote
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Leadership Section -->
+    <section id="leadership" class="leadership-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Leadership Team</h2>
+                <p>Meet the experts driving innovation and excellence in every project</p>
+            </div>
+            <div class="leadership-grid">
+                <!-- Leader 1 -->
+                <div class="leader-card">
+                    <span class="leader-emoji">👨‍💻</span>
+                    <h3>Amon Saikonde Theo</h3>
+                    <div class="leader-title">Lead Software Engineer & Co-Founder</div>
+                    <p class="leader-bio">BSc in Computer Science Engineering with 6+ years of experience in custom software solutions, automation systems, and enterprise application development. Passionate about creating technology that solves real-world problems.</p>
+                    <div class="leader-skills">
+                        <span class="skill-tag">Software Architecture</span>
+                        <span class="skill-tag">Web Development</span>
+                        <span class="skill-tag">Database Design</span>
+                        <span class="skill-tag">Automation</span>
+                    </div>
+                </div>
+                
+                <!-- Leader 2 -->
+                <div class="leader-card">
+                    <span class="leader-emoji">🔒</span>
+                    <h3>Darlington Banda</h3>
+                    <div class="leader-title">System & Security Engineer | CEO</div>
+                    <p class="leader-bio">BSc in Computer Systems & Cybersecurity with expertise in network infrastructure, security solutions, and cloud computing. Specializes in building secure, scalable systems that protect business assets while enabling growth.</p>
+                    <div class="leader-skills">
+                        <span class="skill-tag">Network Security</span>
+                        <span class="skill-tag">Cloud Infrastructure</span>
+                        <span class="skill-tag">System Design</span>
+                        <span class="skill-tag">Cybersecurity</span>
+                        <span class="skill-tag">Business Strategy</span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Contact Us</h2>
+                <p>Get in touch to discuss your technology needs and how we can help your business grow</p>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>Ready to Transform Your Business?</h3>
+                    <p>Whether you need a new website, custom software, network setup, or ongoing IT support, our team is here to help you achieve your goals.</p>
+                    
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone-alt"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>Call Us</h4>
+                                <p><a href="tel:+260776674744">Zambia: +260 776 674 744</a></p>
+                                <p><a href="tel:+265884560048">Malawi: +265 884 56 00 48</a></p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>Email Us</h4>
+                                <p><a href="mailto:montaslab2025@gmail.com">montaslab2025@gmail.com</a></p>
+                                <p>Response time: Within 24 hours</p>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="contact-text">
+                                <h4>Visit Our Offices</h4>
+                                <p><strong>Headquarters:</strong> Nyanje Town Center, Sinda District, Zambia</p>
+                                <p><strong>Regional Office:</strong> Malawi</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-form">
+                    <h3>Send Us a Message</h3>
+                    <form id="contactForm">
+                        <input type="text" placeholder="Your Name" required>
+                        <input type="email" placeholder="Your Email" required>
+                        <input type="tel" placeholder="Your Phone Number">
+                        <select style="width: 100%; padding: 18px; margin-bottom: 25px; border-radius: 10px; border: 2px solid rgba(255, 255, 255, 0.1); background: rgba(255, 255, 255, 0.08); color: white; font-size: 1rem;">
+                            <option value="" disabled selected>Select Service Interested In</option>
+                            <option value="website">Website Development</option>
+                            <option value="software">Software Development</option>
+                            <option value="seo">SEO & Digital Marketing</option>
+                            <option value="networking">Computer Networking</option>
+                            <option value="cctv">CCTV & Surveillance</option>
+                            <option value="support">ICT Support Services</option>
+                            <option value="security">Network Security</option>
+                            <option value="cloud">Cloud & Data Solutions</option>
+                        </select>
+                        <textarea rows="6" placeholder="Tell us about your project or requirements..." required></textarea>
+                        <button type="submit" class="action-button" style="width: 100%;">
+                            <i class="fas fa-paper-plane"></i> Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="copyright">
+                <p>&copy; 2023 The Montas Lab. All Rights Reserved. | Modern Networking Technologies & Digital Solutions | Zambia & Malawi</p>
+                <p style="margin-top: 10px;">Bridging complex digital infrastructure with user‑centric software</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Navigation Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileNav = document.getElementById('mobileNav');
+        const mobileNavOverlay = document.getElementById('mobileNavOverlay');
+        const mobileNavClose = document.getElementById('mobileNavClose');
+        
+        function openMobileNav() {
+            mobileNav.classList.add('active');
+            mobileNavOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeMobileNav() {
+            mobileNav.classList.remove('active');
+            mobileNavOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        mobileMenuBtn.addEventListener('click', openMobileNav);
+        mobileNavClose.addEventListener('click', closeMobileNav);
+        mobileNavOverlay.addEventListener('click', closeMobileNav);
+        
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.mobile-nav a').forEach(link => {
+            link.addEventListener('click', closeMobileNav);
+        });
+        
+        // Active navigation link highlighting
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-menu a, .mobile-nav a');
+        
+        function highlightNavLink() {
+            let scrollPos = window.scrollY + 150;
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                const sectionId = section.getAttribute('id');
+                
+                if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${sectionId}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', highlightNavLink);
+        window.addEventListener('load', highlightNavLink);
+        
+        // Form submission handling
+        const contactForm = document.getElementById('contactForm');
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const button = contactForm.querySelector('button');
+            const originalText = button.innerHTML;
+            
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            button.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                button.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
+                button.style.background = 'var(--success)';
+                
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.style.background = '';
+                    button.disabled = false;
+                    contactForm.reset();
+                    
+                    // Show thank you message
+                    alert('Thank you for your message! We will contact you within 24 hours.');
+                }, 2000);
+            }, 1500);
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    e.preventDefault();
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(15, 23, 42, 0.98)';
+                header.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.15)';
+            } else {
+                header.style.background = 'rgba(15, 23, 42, 0.95)';
+                header.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.1)';
+            }
+        });
+        
+        // Floating buttons animation on scroll
+        const floatingButtons = document.querySelector('.floating-buttons');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                floatingButtons.style.opacity = '1';
+                floatingButtons.style.transform = 'translateY(0)';
+            } else {
+                floatingButtons.style.opacity = '0';
+                floatingButtons.style.transform = 'translateY(20px)';
+            }
+        });
+        
+        // Initial state for floating buttons
+        window.addEventListener('load', () => {
+            floatingButtons.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            if (window.scrollY > 300) {
+                floatingButtons.style.opacity = '1';
+                floatingButtons.style.transform = 'translateY(0)';
+            } else {
+                floatingButtons.style.opacity = '0';
+                floatingButtons.style.transform = 'translateY(20px)';
+            }
+        });
+    </script>
+</body>
+</html>
